@@ -14,10 +14,10 @@ class AnggotaModel(Base):
     """
     __tablename__ = 'tAnggota'
     nim = Column(Integer, primary_key=True)
-    nama = Column(String(60))
-    jurusan = Column(String(30))
+    nama = Column(String(60), nullable=False)
+    jurusan = Column(String(30), nullable=False)
 
-    def __init__(self, nim: int, nama: str, jurusan: str):
+    def __init__(self, nim, nama, jurusan):
         self.nim = nim
         self.nama = nama
         self.jurusan = jurusan
@@ -35,7 +35,7 @@ class AnggotaHelper:
         self.engine = engine
 
     def create(self, anggota: AnggotaModel):
-        """Membuat model Anggota baru dan masuk ke dalam database."""
+        """Membuat model AnggotaModel baru dan masuk ke dalam database."""
         with Session(self.engine) as session:
             session.add(anggota)
             session.commit()
@@ -43,10 +43,10 @@ class AnggotaHelper:
     def update(self, nim, newAnggota: AnggotaModel):
         """Mengubah data angota berdasarkan nim."""
         with Session(self.engine) as session:
-            theAnggota: AnggotaModel = self.read_one(nim)
-            theAnggota.nama = newAnggota.nama
-            theAnggota.jurusan = newAnggota.jurusan
-            session.add(theAnggota)
+            the_anggota: AnggotaModel = self.read_one(nim)
+            the_anggota.nama = newAnggota.nama
+            the_anggota.jurusan = newAnggota.jurusan
+            session.add(the_anggota)
             session.commit()
 
     def delete(self, nim):
@@ -57,8 +57,8 @@ class AnggotaHelper:
         tabel tKembali dan tPinjaman.
         """
         with Session(self.engine) as session:
-            theAnggota = self.read_one(nim)
-            session.delete(theAnggota)
+            the_anggota = self.read_one(nim)
+            session.delete(the_anggota)
             session.commit()
 
     def read(self):
