@@ -10,6 +10,7 @@ engine = create_engine("sqlite:///dbPerpusOn.db")
 app = Flask(__name__)
 
 anggota_helper = AnggotaHelper(engine)
+anggota_helper.read()
 buku_helper = BukuHelper(engine)
 kembali_helper = KembaliHelper(engine)
 pinjaman_helper = PinajmanHelper(engine)
