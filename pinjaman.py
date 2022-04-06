@@ -43,22 +43,22 @@ class PinajmanHelper:
             session.add(pinjaman)
             session.commit()
 
-    def update(self, nim, newPinjaman: PinjamanModel):
-        """Mengubah data angota berdasarkan nim."""
+    def update(self, kode_pinjam, newPinjaman: PinjamanModel):
+        """Mengubah data pnjaman berdasarkan kode pinjam."""
         with Session(self.engine) as session:
-            the_pinjaman: PinjamanModel = self.read_one(nim)
+            the_pinjaman: PinjamanModel = self.read_one(kode_pinjam)
             the_pinjaman.kodeBuku = newPinjaman.kodeBuku
             the_pinjaman.nim = newPinjaman.nim
             the_pinjaman.tanggalPinjam = newPinjaman.tanggalPinjam
             session.add(the_pinjaman)
             session.commit()
 
-    def delete(self, nim):
+    def delete(self, kode_pinjam):
         """
         Menghapus salah satu pinjaman dari database.
         """
         with Session(self.engine) as session:
-            the_pinjaman = self.read_one(nim)
+            the_pinjaman = self.read_one(kode_pinjam)
             session.delete(the_pinjaman)
             session.commit()
 
@@ -68,7 +68,7 @@ class PinajmanHelper:
             return session.query(PinjamanModel)
 
     def read_one(self, kode_pinjam):
-        """Query salah satu dari isi tabel tpinjaman berdasarkan nim."""
+        """Query salah satu dari isi tabel tpinjaman berdasarkan kode_pinjam."""
         with Session(self.engine) as session:
             stmt = select(PinjamanModel).where(PinjamanModel.kodePinjam == kode_pinjam)
             return session.scalars(stmt).one()
