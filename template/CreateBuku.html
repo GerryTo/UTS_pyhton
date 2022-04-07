@@ -9,42 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
-    <title>Tabel Pinjam</title>
+    <title>Halaman Edit</title>
   </head>
   <body>
-  <div class="container m-5">
-      <h1>Pinjaman</h1>
-      <button type="button" class="btn btn-primary">+Baru</button>
-      <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead>
-                <tr class="table-primary">
-                    <th class="text-center">Kode Pinjam</th>
-                    <th class="text-center">Kode Buku</th>
-                    <th class="text-center">NIM</th>
-                    <th class="text-center">Tanggal Pinjam</th>
-                    <th colspan="2" class="text-center">Kontrol</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="text-center">KP001</th>
-                    <td class="text-center">KB001</td>
-                    <td class="text-center">32190076</td>
-                    <td class="text-center">22 April 2021</td>
-                    <td class="text-center">
-                        <a href=""><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                    <td class="text-center">
-                        <a href=""><i class="bi bi-pencil-fill"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-  </div>
-
-
+    <div class="container m-5">
+        <h1>Create</h1>
+       <form action="/">
+          <label for="NamaBuku">Nama Buku:</label><br>
+          <input type="text" id="NamaBuku" name="NamaBuku" value=""><br>
+          <label for="CountBook">Jumlah Buku:</label><br>
+          <input type="number" id="CountBook" name="CountBook" value=""><br><br>
+          <input type="submit" value="Submit">
+        </form>
+    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
