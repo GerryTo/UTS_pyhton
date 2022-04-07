@@ -14,37 +14,31 @@
 </head>
 <body>
     <div class="container m-5">
-    <form action="" method="post">
-        <div class = "form-group">
-            <input type ="number" class="form-control" name="kodePinjam" placeholder="Kode Pinjam">
-        </div>
-        <div class = "form-group">
-            <input type ="text" class="form-control" name="kodeBuku" placeholder="Kode Buku" list="buku">
-            <datalist id="buku">
-            {% for buku in buku_list %}
-                {% if buku.stok > 0 %}
-                <option label="{{ buku.judulBuku }}" value="{{ buku.kodeBuku }}"></option>
-                {% endif %}
+        <form action="" method="post">
+            <div class = "form-group">
+                <input type ="text" class="form-control" name="kodeBuku"
+                       placeholder="Kode Buku" list="buku">
+                <datalist id="buku">
+                {% for buku in buku_list %}
+                    {% if buku.stok > 0 %}
+                    <option label="{{ buku.judulBuku }}" value="{{ buku.kodeBuku }}"></option>
+                    {% endif %}
                 {% endfor %}
-            </datalist>
-        </div>
-        <div class = "form-group">
-            <input type ="number" class="form-control" name="nim" placeholder="NIM" list="anggota">
-            <datalist id="anggota">
-            {% for anggota in anggota_list %}
-                <option label="{{ anggota.nama }} - {{ anggota.jurusan }}" value="{{ anggota.nim }}"></option>
-            {% endfor %}
-            </datalist>
-        </div>
-        <div class = "form-group">
-            <input type ="text" class="form-control" name="tanggalPinjam" id="tanggalPinjam" placeholder="Tanggal Pinjam" disabled>
-            <script>
-                var today = new Date(Date.now())
-                var tostr = today.toLocaleDateString();
-                document.getElementById("tanggalPinjam").innerHTML = tostr;
-            </script>
-        </div>
-        <input type="submit" class="btn btn-primary" value="pinjaman">
-    </form>
+                </datalist>
+            </div>
+            <div class = "form-group">
+                <input type ="text" class="form-control" name="nim"
+                       placeholder="NIM" list="anggota">
+                <datalist id="anggota">
+                {% for anggota in anggota_list %}
+                    <option label="{{ anggota.nama }} - {{ anggota.jurusan }}" value="{{ anggota.nim }}"></option>
+                {% endfor %}
+                </datalist>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Buat">
+            <input type="reset" class="btn btn-secondary" value="Reset">
+            <a href=".."><button class="btn btn-secondary">Kembali</button></a>
+        </form>
+    </div>
 </body>
 </html>
