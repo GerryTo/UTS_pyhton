@@ -87,6 +87,15 @@ def edit_pinjaman(kode_pinjaman):
         return render_template('edit/pinjam_edit.html', pinjaman=the_pinjaman, anggota_list=anggota_helper.read())
 
 
+@app.route('/pinjaman/delete/<kode_pinjaman>', methods=['GET'])
+def delete_pinjaman(kode_pinjaman):
+    the_pinjaman: PinjamanModel = pinjaman_helper.read_one(kode_pinjaman)
+    kode_buku = the_pinjaman.kodeBuku
+    pinjaman_helper.delete(kode_pinjaman)
+    buku_helper.add_one(kode_buku)
+    return redirect(url_for('view_pinjaman'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
