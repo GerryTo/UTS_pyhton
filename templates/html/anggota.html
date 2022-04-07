@@ -9,28 +9,30 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
-    <title>Tabel kembali</title>
+    <title>Tabel Anggota</title>
   </head>
   <body>
   <div class="container m-5">
-      <h1>Kembali</h1>
+      <h1>Anggota</h1>
+      <a href="{{url_for('create_anggota')}}">
+          <button type="button" class="btn btn-primary">+Baru</button>
+      </a>
       <div class="table-responsive">
           <table class="table table-bordered table-striped">
             <thead>
                 <tr class="table-primary">
-                    <th class="text-center">Kode Kembali</th>
-                    <th class="text-center">Kode Buku</th>
                     <th class="text-center">NIM</th>
-                    <th class="text-center">Tanggal Kembali</th>
+                    <th class="text-center">Nama Mahasiswa</th>
+                    <th class="text-center">Jurusan</th>
                     <th colspan="2" class="text-center">Kontrol</th>
                 </tr>
             </thead>
             <tbody>
+            {% for anggota in list %}
                 <tr>
-                    <th class="text-center">KP001</th>
-                    <td class="text-center">KB001</td>
-                    <td class="text-center">32190076</td>
-                    <td class="text-center">24 Agustus 2021</td>
+                    <th class="text-center">{{ anggota.nim }}</th>
+                    <td class="text-center">{{ anggota.nama }}</td>
+                    <td class="text-center">{{ anggota.jurusan }}</td>
                     <td class="text-center">
                         <a href=""><i class="bi bi-trash-fill"></i></a>
                     </td>
@@ -38,6 +40,7 @@
                         <a href=""><i class="bi bi-pencil-fill"></i></a>
                     </td>
                 </tr>
+            {% endfor %}
             </tbody>
         </table>
       </div>

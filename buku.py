@@ -26,6 +26,7 @@ class BukuModel(Base):
         return 'Buku: {kodeBuku: %d, judulBuku: %s, stok: %d}' % \
                (self.kodeBuku, self.judulBuku, self.stok)
 
+
 class BukuHelper:
     """
     Class helper untukk tabel Buku
