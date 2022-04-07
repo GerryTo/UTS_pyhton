@@ -13,6 +13,7 @@ from random import randint
 engine = create_engine("sqlite:///dbPerpusOn.db")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'PUGIOIFFG WEIFVOEIFG IEUFG FBEYOFIHOEWF HBEOYWEHBCORT RUGFBOIDJV'
+app.static_folder = 'static'
 
 anggota_helper = AnggotaHelper(engine)
 anggota_helper.read()
@@ -23,28 +24,26 @@ pinjaman_helper = PinajmanHelper(engine)
 
 @app.route('/anggota', methods=['GET'])
 def view_anggota():
-    return render_template('html/anggota.html', list=anggota_helper.read())
+    return render_template('anggota.html', anggota_list=anggota_helper.read())
 
 
-@app.route('/anggota/create', methods=['GET', 'POST'])
+@app.route('/anggota/create', methods=['POST'])
 def create_anggota():
-    if request.method == 'POST':
-        nim = request.form['nim']
-        nama = request.form['nama']
-        jurusan = request.form['jurusan']
-        new_anggota = AnggotaModel(nim, nama, jurusan)
-        anggota_helper.create(new_anggota)
-        return redirect(url_for('view_anggota'))
-    else:
-        return render_template('create/anggota_create.html')
+    nim = request.form['nim']
+    nama = request.form['nama']
+    jurusan = request.form['jurusan']
+    new_anggota = AnggotaModel(nim, nama, jurusan)
+    anggota_helper.create(new_anggota)
+    return redirect(url_for('view_anggota'))
 
 
-@app.route('/angota/edit/<nim>', methods=['GET', 'POST'])
+@app.route('/anggota/edit/<nim>', methods=['POST'])
 def edit_anggota(nim):
-    if request.method == 'POST':
-        pass
-    else:
-        pass
+    the_anggota: AnggotaModel = anggota_helper.read_one(nim)
+    the_anggota.nama = request.form['nama']
+    the_anggota.jurusan = request.form['jurusan']
+    anggota_helper.update(nim, the_anggota)
+    return redirect(url_for('view_anggota'))
 
 
 @app.route('/anggota/delete/<nim>', methods=['GET'])
@@ -55,14 +54,14 @@ def delete_anggota(nim):
 
 @app.route('/pinjaman', methods=['GET'])
 def view_pinjaman():
-    return render_template('html/pinjam.html', list=pinjaman_helper.read())
+    return render_template('pinjam.html', list=pinjaman_helper.read())
 
 
 @app.route('/pinjaman/create', methods=['GET', 'POST'])
 def create_pinjaman():
     if request.method == 'POST':
         nim = int(request.form['nim'])
-        kodePinjam = randint(0, 100000) ^ nim
+        kodePinjam = randint(1111111, 9999999) ^ nim
         kodeBuku = int(request.form['kodeBuku'])
         tanggalPinjam = date.today().strftime("%Y/%m/%d")
         new_pinjaman = PinjamanModel(kodePinjam, kodeBuku, nim, tanggalPinjam)
