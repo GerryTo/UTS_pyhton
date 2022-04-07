@@ -4,9 +4,6 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
 
-from anggota import AnggotaModel
-from buku import BukuModel
-
 # Declarative base yang akan di-inherit oleh setiap model
 Base = declarative_base()
 
@@ -17,8 +14,8 @@ class PinjamanModel(Base):
     """
     __tablename__ = 'tPinjaman'
     kodePinjam = Column(Integer, primary_key=True)
-    kodeBuku = Column(Integer, ForeignKey(BukuModel.kodeBuku), nullable=False)
-    nim = Column(Integer, ForeignKey(AnggotaModel.nim), nullable=False)
+    kodeBuku = Column(Integer, ForeignKey("tBuku.kodeBuku"), nullable=False)
+    nim = Column(Integer, ForeignKey("tAnggota.nim"), nullable=False)
     tanggalPinjam = Column(String(20), nullable=False)
 
     def __init__(self, kodePinjam, kodeBuku, nim, tanggalPinjam):
