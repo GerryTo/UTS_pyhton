@@ -25,10 +25,10 @@
     <!-- LEFT SIDE -->
     <div class="leftside-wrapper">
         <ul>
-            <li><a href="Index.html">Buku</a></li>
-            <li><a href="anggota.html">Anggota</a></li>
-            <li><a href="pinjam.html">Pinjam</a></li>
-            <li><a href="kembali.html">Kembali</a></li>
+            <li><a href="{{ url_for('view_buku') }}">Buku</a></li>
+            <li><a href="{{ url_for('view_anggota') }}">Anggota</a></li>
+            <li><a href="{{ url_for('view_pinjaman') }}">Pinjam</a></li>
+            <li><a href="{{ url_for('view_kembali') }}">Kembali</a></li>
         </ul>
     </div>
     <!-- RIGHT CONTENT -->
@@ -61,6 +61,7 @@
                             </button>
                         </td>
                         <!--OVERLAY EDIT MEMBER-->
+                        <div id="overlay-background-edit" class="overlay-background">
                         <div id="overlay-edit" class="overlay" data-nim="{{ anggota.nim }}">
                             <!-- BACK BOTTON -->
                             <button class="btn btn-primary btn-back" onClick="offEdit({{ anggota.nim }})">Back</button>
@@ -83,6 +84,7 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
 
                         <!--Tombol hapus -->
                         <td class="text-center">
@@ -99,6 +101,7 @@
     </div>
 </div>
 <!--OVERLAY ADD MEMBER -->
+<div class="overlay-background-add" class="overlay-background">
 <div id="overlay-add" class="overlay">
     <!-- BACK BOTTON -->
     <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
@@ -118,7 +121,7 @@
         </div>
     </div>
 </div>
-
+</div>
 </div>
 
 
