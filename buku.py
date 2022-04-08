@@ -26,6 +26,7 @@ class BukuModel(Base):
         return 'Buku: {kodeBuku: %d, judulBuku: %s, stok: %d}' % \
                (self.kodeBuku, self.judulBuku, self.stok)
 
+
 class BukuHelper:
     """
     Class helper untukk tabel Buku
@@ -51,8 +52,8 @@ class BukuHelper:
         :param newBuku: buku untuk diganti
         :return:
         """
+        the_buku: BukuModel = self.read_one(kodeBuku)
         with Session(self.engine) as session:
-            the_buku: BukuModel = self.read_one(kodeBuku)
             the_buku.judulBuku = newBuku.judulBuku
             the_buku.stok = newBuku.stok
             session.add(the_buku)
@@ -64,8 +65,8 @@ class BukuHelper:
         :param kodeBuku: buku yang ingin dihapus
         :return:
         """
+        the_buku = self.read_one(kodeBuku)
         with Session(self.engine) as session:
-            the_buku = self.read_one(kodeBuku)
             session.delete(the_buku)
             session.commit()
 
@@ -86,3 +87,15 @@ class BukuHelper:
         with Session(self.engine) as session:
             stmt = select(BukuModel).where(BukuModel.kodeBuku == kode_buku)
             return session.scalars(stmt).one()
+
+    def decrease_one(self, kode_buku):
+        the_buku: BukuModel = self.read_one(kode_buku)
+        if the_buku.stok < 1:
+            raise "Buku sudah habis"
+        the_buku.stok = the_buku.stok - 1
+        self.update(kode_buku, the_buku)
+
+    def add_one(self, kode_buku):
+        the_buku: BukuModel = self.read_one(kode_buku)
+        the_buku.stok = the_buku.stok + 1
+        self.update(kode_buku, the_buku)
