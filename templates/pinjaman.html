@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/style.css') }}">
 
-    <title>Pinjam</title>
+    <title>Kelola Pinjaman</title>
 </head>
 <body>
 <header>
@@ -25,10 +25,10 @@
     <!-- LEFT SIDE -->
     <div class="leftside-wrapper">
         <ul>
-            <li><a href="{{ url_for('view_buku') }}">Buku</a></li>
-            <li><a href="{{ url_for('view_anggota') }}">Anggota</a></li>
+            <li><a href="{{ url_for('view_buku') }}"    >Buku</a></li>
+            <li><a href="{{ url_for('view_anggota') }}" >Anggota</a></li>
             <li><a href="{{ url_for('view_pinjaman') }}">Pinjam</a></li>
-            <li><a href="{{ url_for('view_kembali') }}">Kembali</a></li>
+            <li><a href="{{ url_for('view_kembali') }}" >Kembali</a></li>
         </ul>
     </div>
     <!-- RIGHT CONTENT -->
@@ -58,25 +58,27 @@
                         <td class="text-center"> {{ pinjaman.tanggalPinjam }}</td>
                         <!-- Tombol edit -->
                         <td class="text-center">
-                            <button onClick="onEdit({{ pinjaman.kodePinjam }})" class="btn btn-primary">
+                            <button onClick="onEdit('{{ pinjaman.kodePinjam }}')" class="btn btn-primary">
                                 <i class="bi bi-pencil-fill"></i></button>
                         </td>
 
-                        <div id="overlay-background-edit" class="overlay-background">
+                        <div id="overlay-background-edit" class="overlay-background" data-pinjam="{{ pinjaman.kodePinjam }}">
                             <div id="overlay-edit" class="overlay" data-pinjam="{{ pinjaman.kodePinjam }}">
                                 <!-- BACK BOTTON -->
-                                <button class="btn btn-primary btn-back" onClick="offEdit({{ pinjaman.kodePinjam }})">Back</button>
+                                <button class="btn btn-primary btn-back" onClick="offEdit('{{ pinjaman.kodePinjam }}')">Back</button>
                                 <div class="overlay-content">
                                     <h2 class="overlay-title">Ubah Data Pinjaman</h2>
-                                    <!-- INPUT ADD BORROW -->
+                                    <!-- INPUT EDIT BORROW -->
                                     <div class="overlay-input">
                                         <form action="{{ url_for('edit_pinjaman', kode_pinjaman=pinjaman.kodePinjam) }}" method="POST">
+                                            <label for="kode-pinjaman" class="form-label">Kode pinjaman: </label>
+                                            <input type="text" id="kode-pinjaman" value="{{pinjaman.kodePinjam}}" readonly class="form-control">
                                             <label for="kode-buku-edit" class="form-label">Kode Buku:</label><br>
-                                            <input type="text" id="kode-buku-edit" name="kodebuku" value="{{ pinjaman.kodeBuku }}" readonly
-                                                   class="form-control"><br>
+                                            <input type="text" id="kode-buku-edit" value="{{ pinjaman.kodeBuku }}" readonly
+                                                   class="form-control" list="buku"><br>
                                             <label for="nim" class="form-label">Nomor Induk Mahasiswa:</label><br>
-                                            <input type="text" id="nim"  value="{{ pinjaman.nim }}" class="form-control"
-                                                   onkeydown="javascript: return isNumberInput(event);"/><br>
+                                            <input type="text" id="nim" name="nim" value="{{ pinjaman.nim }}" class="form-control"
+                                                   onkeydown="javascript: return isNumberInput(event);" list="anggota"/><br>
                                             <input type="submit" class="btn btn-primary"/>
                                         </form>
                                     </div>
@@ -108,11 +110,24 @@
                 <div class="overlay-input">
                     <form action="/pinjaman/create" method="POST">
                         <label for="kode-buku-add" class="form-label">Kode Buku:</label><br>
-                        <input type="text" id="kode-buku-add" name="kodebuku" class="form-control"><br>
+                        <input type="text" id="kode-buku-add" name="kodeBuku" list="buku" class="form-control"><br>
                         <label for="Nim" class="form-label">Nomor Induk Mahasiswa:</label><br>
-                        <input type="text" class="form-control"
-                               onkeydown="javascript: return isNumberInput(event);"/><br>
+                        <input type="text" class="form-control" name="nim"
+                               onkeydown="javascript: return isNumberInput(event);" list="anggota"/><br>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <datalist id="buku">
+                            {% for buku in buku_list %}
+                            {% if buku.stok > 0 %}
+                            <option label="{{ buku.judulBuku }}" value="{{ buku.kodeBuku }}"></option>
+                            {% endif %}
+                            {% endfor %}
+                        </datalist>
+                        <datalist id="anggota">
+                            {% for anggota in anggota_list %}
+                            <option label="{{ anggota.nama }} - {{ anggota.jurusan }}"
+                                    value="{{ anggota.nim }}"></option>
+                            {% endfor %}
+                        </datalist>
                     </form>
                 </div>
             </div>
@@ -148,13 +163,13 @@
         }
         
         function onEdit(whichId) {
-          document.querySelector(`#overlay-background-edit`).style.display="block"
+          document.querySelector(`#overlay-background-edit[data-pinjam="${whichId}"]`).style.display="block"
           document.querySelector(`#overlay-edit[data-pinjam="${whichId}"]`).style.display="block";
           // document.getElementById(`overlay-edit#${whichId}`).style.display = "block";
         }
 
         function offEdit(whichId) {
-          document.querySelector(`#overlay-background-edit`).style.display="none"
+          document.querySelector(`#overlay-background-edit[data-pinjam="${whichId}"]`).style.display="none"
           document.querySelector(`#overlay-edit[data-pinjam="${whichId}"]`).style.display="none";
           // document.getElementById(`overlay-edit#${whichId}`).style.display = "none";
         }

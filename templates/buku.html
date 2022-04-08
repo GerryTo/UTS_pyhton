@@ -12,35 +12,23 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/style.css') }}">
 
-    <title>Hello, world!</title>
+    <title>Kelola Buku</title>
 </head>
 <body>
 <header>
     <div class="logo">
-        <h1 class="logo-wa">GERRY</h1>
+        <h1 class="logo-wa">Kelompok 2</h1>
     </div>
-    <ul class="nav">
-        <li>
-            <a href="">
-                Gerry Tonnoto
-            </a>
-            <ul>
-                <li>
-                    <a href="" class="logout">Lagout</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
 </header>
 <!-- INDEX WRAPPER -->
 <div class="index-wrapper">
     <!-- LEFT SIDE -->
     <div class="leftside-wrapper">
         <ul>
-            <li><a href="Index.html">Buku</a></li>
-            <li><a href="anggota.html">Anggota</a></li>
-            <li><a href="pinjam.html">Pinjam</a></li>
-            <li><a href="kembali.html">Kembali</a></li>
+            <li><a href="{{ url_for('view_buku') }}">Buku</a></li>
+            <li><a href="{{ url_for('view_anggota') }}">Anggota</a></li>
+            <li><a href="{{ url_for('view_pinjaman') }}">Pinjam</a></li>
+            <li><a href="{{ url_for('view_kembali') }}">Kembali</a></li>
         </ul>
     </div>
     <!-- RIGHT CONTENT -->
@@ -69,17 +57,41 @@
 
                         <!-- Tombol edit -->
                         <td class="text-center">
-                            <button onClick="onEdit()" class="btn btn-primary"><i class="bi bi-pencil-fill"></i>
+                            <button onClick="onEdit('{{ buku.kodeBuku }}')" class="btn btn-primary"><i
+                                    class="bi bi-pencil-fill"></i>
                             </button>
                         </td>
 
                         <!--OVERLAY EDIT BOOK-->
-                        <div id="overlay-background-add" class="overlay-background">
-
+                        <div id="overlay-background-edit" class="overlay-background" data-kode="{{ buku.kodeBuku }}">
+                            <div id="overlay-edit" class="overlay" data-kode="{{ buku.kodeBuku }}">
+                                <!-- BACK BOTTON -->
+                                <button class="btn btn-primary btn-back" onClick="offEdit('{{ buku.kodeBuku }}')">Back
+                                </button>
+                                <div class="overlay-content">
+                                    <h2 class="overlay-title">Edit Book</h2>
+                                    <!-- INPUT ADD BOOK -->
+                                    <div class="overlay-input">
+                                        <form action="{{ url_for('edit_buku', kode_buku=buku.kodeBuku) }}"
+                                              method="post">
+                                            <label for="kode-edit" class="form-label">Kode buku:</label>
+                                            <input type="text" id="kode-edit" value="{{ buku.kodeBuku }}" readonly class="form-control">
+                                            <label for="name-edit" class="form-label">Nama buku:</label><br>
+                                            <input type="text" id="name-edit" name="nama" class="form-control" value="{{ buku.judulBuku }}"><br>
+                                            <label for="jumlah-edit" class="form-label">Jumlah Buku:</label><br>
+                                            <input type="number" id="jumlah-edit" name="jumlah" value="{{ buku.stok }}"
+                                                   class="form-control"><br>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!--Tombol hapus -->
                         <td class="text-center">
-                            <button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                            <a href="{{url_for('delete_buku', kode_buku=buku.kodeBuku)}}">
+                                <button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -89,20 +101,22 @@
         </div>
     </div>
     <!--OVERLAY ADD BOOK -->
-    <div id="overlay-add" class="overlay">
-        <!-- BACK BOTTON -->
-        <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
-        <div class="overlay-content">
-            <h2 class="overlay-title">Add Book</h2>
-            <!-- INPUT ADD BOOK -->
-            <div class="overlay-input">
-                <form action="/buku/create" method="post">
-                    <label for="nama-add" class="form-label">Nama Buku:</label><br>
-                    <input type="text" id="nama-add" name="nama" class="form-control"><br>
-                    <label for="jumlah-add" class="form-label">Jumlah Buku:</label><br>
-                    <input type="number" id="jumlah-add" name="jumlah" class="form-control"><br>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+    <div id="overlay-background-add" class="overlay-background">
+        <div id="overlay-add" class="overlay">
+            <!-- BACK BOTTON -->
+            <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
+            <div class="overlay-content">
+                <h2 class="overlay-title">Add Book</h2>
+                <!-- INPUT ADD BOOK -->
+                <div class="overlay-input">
+                    <form action="/buku/create" method="post">
+                        <label for="nama-add" class="form-label">Nama Buku:</label><br>
+                        <input type="text" id="nama-add" name="nama" class="form-control"><br>
+                        <label for="jumlah-add" class="form-label">Jumlah Buku:</label><br>
+                        <input type="number" id="jumlah-add" name="jumlah" class="form-control"><br>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -128,20 +142,23 @@
 <script>
         function onAdd() {
           document.getElementById("overlay-add").style.display = "block";
+          document.getElementById("overlay-background-add").style.display = "block";
         }
 
         function offAdd() {
           document.getElementById("overlay-add").style.display = "none";
+          document.getElementById("overlay-background-add").style.display = "none";
         }
         
-        function onEdit() {
-          document.getElementById("overlay-edit").style.display = "block";
+        function onEdit(whichId) {
+          document.querySelector(`#overlay-background-edit[data-kode="${whichId}"]`).style.display="block"
+          document.querySelector(`#overlay-edit[data-kode="${whichId}"]`).style.display="block";
         }
 
-        function offEdit() {
-          document.getElementById("overlay-edit").style.display = "none";
+        function offEdit(whichId) {
+          document.querySelector(`#overlay-background-edit[data-kode="${whichId}"]`).style.display="none"
+          document.querySelector(`#overlay-edit[data-kode="${whichId}"]`).style.display="none";
         }
-
 
 </script>
 </body>

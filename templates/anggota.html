@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/style.css') }}">
 
-    <title>Anggota</title>
+    <title>Kelola Anggota</title>
 </head>
 <body>
 <header>
@@ -62,30 +62,32 @@
                         </td>
                         <!--OVERLAY EDIT MEMBER-->
                         <div id="overlay-background-edit" class="overlay-background">
-                        <div id="overlay-edit" class="overlay" data-nim="{{ anggota.nim }}">
-                            <!-- BACK BOTTON -->
-                            <button class="btn btn-primary btn-back" onClick="offEdit({{ anggota.nim }})">Back</button>
-                            <div class="overlay-content">
-                                <h2 class="overlay-title">Ubah Data Anggota </h2>
-                                <!-- INPUT EDIT MEMBER -->
-                                <div class="overlay-input">
-                                    <form action="{{ url_for('edit_anggota', nim=anggota.nim) }}" method="post">
-                                        <label for="nim-edit" class="form-label">Nomor Induk Mahasiswa:</label><br>
-                                        <input type="number" id="nim-edit" name="nim" value="{{ anggota.nim }}" readonly
-                                               class="form-control"><br>
-                                        <label for="nama-edit" class="form-label">Nama Mahasiswa:</label><br>
-                                        <input type="text" id="nama-edit" name="nama" value="{{ anggota.nama }}"
-                                               class="form-control"><br>
-                                        <label for="jurusan-edit" class="form-label">Jurusan:</label><br>
-                                        <input type="text" id="jurusan-edit" name="jurusan" value="{{ anggota.jurusan}}"
-                                               class="form-control"><br>
-                                        <input type="submit" class="btn btn-primary"/>
-                                    </form>
+                            <div id="overlay-edit" class="overlay" data-nim="{{ anggota.nim }}">
+                                <!-- BACK BOTTON -->
+                                <button class="btn btn-primary btn-back" onClick="offEdit({{ anggota.nim }})">Back
+                                </button>
+                                <div class="overlay-content">
+                                    <h2 class="overlay-title">Ubah Data Anggota </h2>
+                                    <!-- INPUT EDIT MEMBER -->
+                                    <div class="overlay-input">
+                                        <form action="{{ url_for('edit_anggota', nim=anggota.nim) }}" method="post">
+                                            <label for="nim-edit" class="form-label">Nomor Induk Mahasiswa:</label><br>
+                                            <input type="number" id="nim-edit" name="nim" value="{{ anggota.nim }}"
+                                                   readonly
+                                                   class="form-control"><br>
+                                            <label for="nama-edit" class="form-label">Nama Mahasiswa:</label><br>
+                                            <input type="text" id="nama-edit" name="nama" value="{{ anggota.nama }}"
+                                                   class="form-control"><br>
+                                            <label for="jurusan-edit" class="form-label">Jurusan:</label><br>
+                                            <input type="text" id="jurusan-edit" name="jurusan"
+                                                   value="{{ anggota.jurusan}}"
+                                                   class="form-control"><br>
+                                            <input type="submit" class="btn btn-primary"/>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
-
                         <!--Tombol hapus -->
                         <td class="text-center">
                             <a href="{{ url_for('delete_anggota', nim=anggota.nim) }}">
@@ -102,25 +104,25 @@
 </div>
 <!--OVERLAY ADD MEMBER -->
 <div class="overlay-background-add" class="overlay-background">
-<div id="overlay-add" class="overlay">
-    <!-- BACK BOTTON -->
-    <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
-    <div class="overlay-content">
-        <h2 class="overlay-title">Tambah Anggota</h2>
-        <!-- INPUT ADD MEMBER -->
-        <div class="overlay-input">
-            <form action="/anggota/create" method="POST">
-                <label for="nim-add" class="form-label">Nomor Induk Mahasiswa:</label><br>
-                <input type="number" id="nim-add" name="nim" class="form-control"><br>
-                <label for="nama-add" class="form-label">Nama Mahasiswa:</label><br>
-                <input type="text" id="nama-add" name="nama" class="form-control"><br>
-                <label for="jurusan-add" class="form-label">Jurusan:</label><br>
-                <input type="text" id="jurusan-add" name="jurusan" class="form-control"><br>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+    <div id="overlay-add" class="overlay">
+        <!-- BACK BOTTON -->
+        <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
+        <div class="overlay-content">
+            <h2 class="overlay-title">Tambah Anggota</h2>
+            <!-- INPUT ADD MEMBER -->
+            <div class="overlay-input">
+                <form action="/anggota/create" method="POST">
+                    <label for="nim-add" class="form-label">Nomor Induk Mahasiswa:</label><br>
+                    <input type="number" id="nim-add" name="nim" class="form-control"><br>
+                    <label for="nama-add" class="form-label">Nama Mahasiswa:</label><br>
+                    <input type="text" id="nama-add" name="nama" class="form-control"><br>
+                    <label for="jurusan-add" class="form-label">Jurusan:</label><br>
+                    <input type="text" id="jurusan-add" name="jurusan" class="form-control"><br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 
@@ -159,6 +161,7 @@
           document.querySelector(`#overlay-edit[data-nim="${whichId}"]`).style.display="none";
           // document.getElementById(`overlay-edit#${whichId}`).style.display = "none";
         }
+
 
 
 </script>

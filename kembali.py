@@ -72,6 +72,8 @@ class KembaliHelper:
         Query semua isi dari tabel tKembali
         :return: Semua isi tabel dari tKembali
         """
+        with Session(self.engine) as session:
+            return session.query(KembaliModel)
 
     def read_one(self, kode_kembali):
         """

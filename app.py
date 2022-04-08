@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, \
-    flash, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, \
+                    request, redirect, url_for
 from sqlalchemy import create_engine
 from anggota import *
 from buku import *
@@ -9,7 +8,6 @@ from pinjaman import *
 
 from datetime import date
 import time
-from random import randint
 
 engine = create_engine("sqlite:///dbPerpusOn.db")
 app = Flask(__name__)
@@ -20,6 +18,11 @@ anggota_helper.read()
 buku_helper = BukuHelper(engine)
 kembali_helper = KembaliHelper(engine)
 pinjaman_helper = PinajmanHelper(engine)
+
+
+@app.route('/')
+def index():
+    return render_template('home.html')
 
 
 @app.route('/anggota', methods=['GET'])
@@ -54,36 +57,30 @@ def delete_anggota(nim):
 
 @app.route('/pinjaman', methods=['GET'])
 def view_pinjaman():
-    return render_template('pinjam.html', pinjaman_list=pinjaman_helper.read())
+    return render_template('pinjaman.html', pinjaman_list=pinjaman_helper.read(),
+                                          buku_list=buku_helper.read(),
+                                          anggota_list=anggota_helper.read())
 
 
-@app.route('/pinjaman/create', methods=['GET', 'POST'])
+@app.route('/pinjaman/create', methods=['POST'])
 def create_pinjaman():
-    if request.method == 'POST':
-        nim = int(request.form['nim'])
-        kodePinjam = randint(1111111, 9999999) ^ nim
-        kodeBuku = int(request.form['kodeBuku'])
-        tanggalPinjam = date.today().strftime("%Y/%m/%d")
-        new_pinjaman = PinjamanModel(kodePinjam, kodeBuku, nim, tanggalPinjam)
-        pinjaman_helper.create(new_pinjaman)
-        buku_helper.decrease_one(kodeBuku)
-        return redirect(url_for('view_pinjaman'))
-    else:
-        return render_template('create/pinjaman_create.html',
-                               buku_list=buku_helper.read(),
-                               anggota_list=anggota_helper.read())
+    nim = int(request.form['nim'])
+    kodePinjam = int(time.time() * 100) ^ nim
+    kodeBuku = int(request.form['kodeBuku'])
+    tanggalPinjam = date.today().strftime("%Y/%m/%d")
+    new_pinjaman = PinjamanModel(kodePinjam, kodeBuku, nim, tanggalPinjam)
+    pinjaman_helper.create(new_pinjaman)
+    buku_helper.decrease_one(kodeBuku)
+    return redirect(url_for('view_pinjaman'))
 
 
-@app.route('/pinjaman/edit/<kode_pinjaman>', methods=['GET', 'POST'])
+@app.route('/pinjaman/edit/<kode_pinjaman>', methods=['POST'])
 def edit_pinjaman(kode_pinjaman):
     the_pinjaman: PinjamanModel = pinjaman_helper.read_one(kode_pinjaman)
-    if request.method == 'POST':
-        nim = request.form['nim']
-        the_pinjaman.nim = nim
-        pinjaman_helper.update(kode_pinjaman, the_pinjaman)
-        return redirect(url_for('view_pinjaman'))
-    else:
-        return render_template('edit/pinjam_edit.html', pinjaman=the_pinjaman, anggota_list=anggota_helper.read())
+    nim = request.form['nim']
+    the_pinjaman.nim = nim
+    pinjaman_helper.update(kode_pinjaman, the_pinjaman)
+    return redirect(url_for('view_pinjaman'))
 
 
 @app.route('/pinjaman/delete/<kode_pinjaman>', methods=['GET'])
@@ -123,9 +120,43 @@ def edit_buku(kode_buku):
 
 @app.route('/buku/delete/<kode_buku>', methods=['GET'])
 def delete_buku(kode_buku):
-    # TODO: CHECK BOOK CONSTRAINTS FROM PINJAMAN TABLE
+    buku_helper.delete(kode_buku)
+    return redirect(url_for('view_buku'))
 
-    pass
+
+@app.route('/kembali', methods=['GET'])
+def view_kembali():
+    return render_template('kembali.html',
+                           kembali_list=kembali_helper.read(),
+                           anggota_list=anggota_helper.read(),
+                           buku_list=buku_helper.read())
+
+
+@app.route('/kembali/create', methods=['POST'])
+def create_kembali():
+    nim = int(request.form['nim'])
+    kode_kembali = int(time.time() * 100) ^ nim
+    kode_buku = request.form['kodeBuku']
+    tanggal_kembali = date.today().strftime("%Y/%m/%d")
+    new_kembali = KembaliModel(kode_kembali, kode_buku, nim, tanggal_kembali)
+    kembali_helper.create(new_kembali)
+    buku_helper.add_one(kode_buku)
+
+    return redirect(url_for('view_kembali'))
+
+
+@app.route('/kembali/edit/<kode_kembali>', methods=['POST'])
+def edit_kembali(kode_kembali):
+    the_kembali: KembaliModel = kembali_helper.read_one(kode_kembali)
+    the_kembali.nim = request.form['nim']
+    kembali_helper.update(kode_kembali, the_kembali)
+    return redirect(url_for('view_kembali'))
+
+
+@app.route('/kembali/delete/<kode_kembali>', methods=['GET'])
+def delete_kembali(kode_kembali):
+    kembali_helper.delete(kode_kembali)
+    return redirect(url_for('view_kembali'))
 
 
 if __name__ == '__main__':
