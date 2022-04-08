@@ -17,7 +17,7 @@
 <body>
 <header>
     <div class="logo">
-        <h1 class="logo-wa">GERRY</h1>
+        <h1 class="logo-wa">Kelompok 2</h1>
     </div>
 </header>
 <!-- INDEX WRAPPER -->
@@ -56,7 +56,8 @@
                         <td class="text-center">{{ anggota.jurusan }}</td>
                         <!-- Tombol edit -->
                         <td class="text-center">
-                            <button onClick="onEdit('{{ anggota.nim }}')" class="btn btn-primary"><i class="bi bi-pencil-fill"></i>
+                            <button onClick="onEdit('{{ anggota.nim }}')" class="btn btn-primary"><i
+                                    class="bi bi-pencil-fill"></i>
                             </button>
                         </td>
                         <!--OVERLAY EDIT MEMBER-->
@@ -69,12 +70,15 @@
                                 <div class="overlay-input">
                                     <form action="{{ url_for('edit_anggota', nim=anggota.nim) }}" method="post">
                                         <label for="nim-edit" class="form-label">Nomor Induk Mahasiswa:</label><br>
-                                        <input type="number" id="nim-edit" name="nim" value="{{ anggota.nim }}" readonly class="form-control"><br>
+                                        <input type="number" id="nim-edit" name="nim" value="{{ anggota.nim }}" readonly
+                                               class="form-control"><br>
                                         <label for="nama-edit" class="form-label">Nama Mahasiswa:</label><br>
-                                        <input type="text" id="nama-edit" name="nama" value="{{ anggota.nama }}" class="form-control"><br>
+                                        <input type="text" id="nama-edit" name="nama" value="{{ anggota.nama }}"
+                                               class="form-control"><br>
                                         <label for="jurusan-edit" class="form-label">Jurusan:</label><br>
-                                        <input type="text" id="jurusan-edit" name="jurusan" value="{{ anggota.jurusan}}" class="form-control"><br>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <input type="text" id="jurusan-edit" name="jurusan" value="{{ anggota.jurusan}}"
+                                               class="form-control"><br>
+                                        <input type="submit" class="btn btn-primary"/>
                                     </form>
                                 </div>
                             </div>
@@ -152,6 +156,7 @@
           document.querySelector(`#overlay-edit[data-nim="${whichId}"]`).style.display="none";
           // document.getElementById(`overlay-edit#${whichId}`).style.display = "none";
         }
+
 
 </script>
 </body>

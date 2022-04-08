@@ -54,7 +54,7 @@ def delete_anggota(nim):
 
 @app.route('/pinjaman', methods=['GET'])
 def view_pinjaman():
-    return render_template('pinjam.html', list=pinjaman_helper.read())
+    return render_template('pinjam.html', pinjaman_list=pinjaman_helper.read())
 
 
 @app.route('/pinjaman/create', methods=['GET', 'POST'])
