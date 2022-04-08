@@ -7,38 +7,128 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
-    <title>Hello, world!</title>
+    <link rel="stylesheet" href="style.css">
+
+    <title>Pinjam</title>
   </head>
   <body>
-  <div class="container m-5">
-      <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Kode Pinjam</th>
-                    <th>Kode Buku</th>
-                    <th>NIM</th>
-                    <th>Tanggal Pinjam</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>KP001</th>
-                    <td>KB001</td>
-                    <td>32190076</td>
-                    <td>22 April 2021</td>
-                    <td>Delete</td>
-                    <td>Edit</td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-  </div>
+    <header>
+        <div class="logo">
+            <h1 class="logo-wa">Kelompok 2</h1>
+        </div>
+    </header>
+    <!-- INDEX WRAPPER -->
+    <div class="index-wrapper">
+        <!-- LEFT SIDE -->
+        <div class="leftside-wrapper">
+            <ul>
+                <li><a href="buku.html">Buku</a></li>
+                <li><a href="anggota.html">Anggota</a></li>
+                <li><a href="pinjam.html">Pinjam</a></li>
+                <li><a href="kembali.html">Kembali</a></li>
+            </ul>
+        </div>
+        <!-- RIGHT CONTENT -->
+        <div class="rightside-content">
+            <!-- button -->
+            <button class="btn btn-primary" onclick="onAdd()">Tambah Pinjam</button>
+
+            <div class="content">
+                <h2 class="page-title">Tabel Pinjam</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th class="text-center">Kode Pinjam</th>
+                                <th class="text-center">Kode Buku</th>
+                                <th class="text-center">NIM</th>
+                                <th class="text-center">Tanggal Pinjam</th>
+                                <th colspan="2" class="text-center">Kontrol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">KP001</th>
+                                <td class="text-center">KB002</td>
+                                <td class="text-center">32190076</td>
+                                <td class="text-center">7/4/2022</td>
+                                <!-- Tombol edit -->
+                                <td class="text-center">
+                                    <button onClick="onEdit()" class="btn btn-primary"><i class="bi bi-pencil-fill"></i></button>
+                                </td>
+
+                                <!--Tombol hapus -->
+                                <td class="text-center">
+                                    <button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <!--OVERLAY ADD BORROW -->
+    <div class="overlay-background-add" class="overlay-background">
+        <div id="overlay-add" class="overlay">
+            <!-- BACK BOTTON -->
+            <button class="btn btn-primary btn-back" onClick="offAdd()">Back</button>
+            <div class="overlay-content">
+                <h2 class="overlay-title">Tambah Pinjaman</h2>
+                <!-- INPUT ADD BORROW -->
+                <div class="overlay-input">
+                    <form action="/">
+                        <label for="KodeBuku" class="form-label">Kode Buku:</label><br>
+                        <input type="text" id="KodeBuku-add" name="KodeBuku" value=""class="form-control" list="buku"><br>
+                        <datalist id="buku">
+                        {% for buku in buku_list %}
+                            {% if buku.stok > 0 %}
+                            <option label="{{ buku.judulBuku }}" value="{{ buku.kodeBuku }}"></option>
+                            {% endif %}
+                        {% endfor %}
+                        </datalist>
+                        <label for="Nim" class="form-label">Nomor Induk Mahasiswa:</label><br>
+                        <input type="text" class="form-control" list="anggota" onkeydown="javascript: return isNumberInput(event);"/><br>
+                        <datalist id="anggota">
+                            {% for anggota in anggota_list %}
+                                <option label="{{ anggota.nama }} - {{ anggota.jurusan }}" value="{{ anggota.nim }}"></option>
+                            {% endfor %}
+                        </datalist>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--OVERLAY EDIT BORROW-->
+    <div class="overlay-background-edit" class="overlay-background">
+        <div id="overlay-edit" class="overlay">
+            <!-- BACK BOTTON -->
+            <button class="btn btn-primary btn-back" onClick="offEdit()">Back</button>
+            <div class="overlay-content">
+                <h2 class="overlay-title">Ubah Data Pinjam </h2>
+                <!-- INPUT EDIT BORROW -->
+                <div class="overlay-input">
+                    <form action="/">
+                        <label for="KodeBuku" class="form-label">Kode Buku:</label><br>
+                        <input type="number" id="NIM" name="NIM" value=""class="form-control"><br>
+                        <label for="Nim" class="form-label">Nomor Induk Mahasiswa:</label><br>
+                        <input type="text" id="Nim" name="nim" value="" class="form-control"><br>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    <!-- Optional JavaScript; choose one of the two! -->
 
+    <!-- <div class="jumbotron">
+        <h1 align="center" class="judul">PERPUSTAKAAN UBM</h1>
+    </div>
+    </div> -->
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
@@ -47,5 +137,41 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
+    <!--script for open and close overlay  -->
+    <script>
+        function onAdd() {
+          document.getElementById("overlay-add").style.display = "block";
+          document.getElementById("overlay-background-add").style.display = "block";
+        }
+
+        function offAdd() {
+          document.getElementById("overlay-add").style.display = "none";
+          document.getElementById("overlay-background-add").style.display = "none";
+        }
+
+        function onEdit() {
+          document.getElementById("overlay-edit").style.display = "block";
+          document.getElementById("overlay-background-edit").style.display = "block";
+        }
+
+        function offEdit() {
+          document.getElementById("overlay-edit").style.display = "none";
+          document.getElementById("overlay-background-edit").style.display = "none";
+        }
+
+        function isNumberInput(event) {
+            // is Backspace, Delete, Arrow Left, or ArrowRight is pressed?
+            return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ?
+
+                // returns true (allow user to press)
+                true :
+
+                // otherwise, check if the key pressed is a number
+                !isNaN(Number(event.key)) &&
+
+                // and make sure Space cannot be pressed
+                event.code!=='Space'
+        }
+    </script>
   </body>
 </html>
