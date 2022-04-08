@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request,\
-        flash, redirect, url_for
+from flask import Flask, render_template, request, \
+    flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from anggota import *
@@ -8,12 +8,12 @@ from kembali import *
 from pinjaman import *
 
 from datetime import date
+import time
 from random import randint
 
 engine = create_engine("sqlite:///dbPerpusOn.db")
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'PUGIOIFFG WEIFVOEIFG IEUFG FBEYOFIHOEWF HBEOYWEHBCORT RUGFBOIDJV'
-app.static_folder = 'static'
 
 anggota_helper = AnggotaHelper(engine)
 anggota_helper.read()
@@ -95,6 +95,38 @@ def delete_pinjaman(kode_pinjaman):
     return redirect(url_for('view_pinjaman'))
 
 
+@app.route('/buku', methods=['GET'])
+def view_buku():
+    return render_template('buku.html', buku_list=buku_helper.read())
+
+
+@app.route('/buku/create', methods=['POST'])
+def create_buku():
+    nama_buku = request.form['nama']
+    kode_buku = nama_buku.__hash__() ^ int(time.time() * 100)  # time diff until ms
+    jumlah_buku = request.form['jumlah']
+    the_buku = BukuModel(kode_buku, nama_buku, jumlah_buku)
+    buku_helper.create(the_buku)
+
+    return redirect(url_for('view_buku'))
+
+
+@app.route('/buku/edit/<kode_buku>', methods=['POST'])
+def edit_buku(kode_buku):
+    the_buku: BukuModel = buku_helper.read_one(kode_buku)
+    the_buku.judulBuku = request.form['nama']
+    the_buku.stok = request.form['jumlah']
+    buku_helper.update(kode_buku, the_buku)
+
+    return redirect(url_for('view_buku'))
+
+
+@app.route('/buku/delete/<kode_buku>', methods=['GET'])
+def delete_buku(kode_buku):
+    # TODO: CHECK BOOK CONSTRAINTS FROM PINJAMAN TABLE
+
+    pass
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
